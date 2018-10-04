@@ -2,7 +2,7 @@
 
 [Serverless Stack](http://serverless-stack.com) is a free comprehensive guide to creating full-stack serverless applications. We create a [note taking app](https://demo.serverless-stack.com) from scratch.
 
-This repo is [a fork of the original client](https://github.com/AnomalyInnovations/serverless-stack-demo-client) with added support for a Login with Facebook option. You can visit [a hosted version of this app here](https://demo-fb-login.serverless-stack.com).
+This repo is [a fork of the original client](https://github.com/AnomalyInnovations/serverless-stack-demo-client) with added support for a Login with Facebook option. You can visit [a hosted version of this app here](https://demo-user-mgmt.serverless-stack.com).
 
 #### Usage
 

@@ -97,7 +97,9 @@ export default class ResetPassword extends Component {
           text="Send Confirmation"
           isLoading={this.state.isSendingCode}
           disabled={!this.validateCodeForm()}
-        />
+        >
+          Send Confirmation
+        </LoaderButton>
       </form>
     );
   }

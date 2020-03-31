@@ -1,56 +1,40 @@
-import React, { Component, Fragment } from "react";
-import { Auth } from "aws-amplify";
-import { Link, withRouter } from "react-router-dom";
-import { Nav, Navbar, NavItem } from "react-bootstrap";
-import { LinkContainer } from "react-router-bootstrap";
-import Routes from "./Routes";
+import React, { useState, useEffect, Fragment } from "react";
 import "./App.css";
+import Routes from "./Routes";
+import { Link, withRouter } from "react-router-dom";
+import { Navbar, Nav, NavItem } from "react-bootstrap";
+import { LinkContainer } from "react-router-bootstrap";
+import { Auth } from "aws-amplify";
 
-class App extends Component {
-  constructor(props) {
-    super(props);
+function App(props) {
+  const [isAuthenticating, setIsAuthenticating] = useState(true);
+  const [isAuthenticated, userHasAuthenticated] = useState(false);
 
-    this.state = {
-      isAuthenticated: false,
-      isAuthenticating: true
-    };
-  }
+  useEffect(() => {
+    onLoad();
+  }, []);
 
-  async componentDidMount() {
+  async function onLoad() {
     try {
-      if (await Auth.currentSession()) {
-        this.userHasAuthenticated(true);
+      await Auth.currentSession();
+      userHasAuthenticated(true);
+    } catch (error) {
+      if (error !== "No current user") {
+        alert(error);
       }
     }
-    catch(e) {
-      if (e !== 'No current user') {
-        alert(e);
-      }
-    }
 
-    this.setState({ isAuthenticating: false });
+    setIsAuthenticating(false);
   }
 
-  userHasAuthenticated = authenticated => {
-    this.setState({ isAuthenticated: authenticated });
-  }
-
-  handleLogout = async event => {
+  async function handleLogout() {
     await Auth.signOut();
-
-    this.userHasAuthenticated(false);
-
-    this.props.history.push("/login");
+    userHasAuthenticated(false);
+    props.history.push("/login");
   }
 
-  render() {
-    const childProps = {
-      isAuthenticated: this.state.isAuthenticated,
-      userHasAuthenticated: this.userHasAuthenticated
-    };
-
-    return (
-      !this.state.isAuthenticating &&
+  return (
+    !isAuthenticating && (
       <div className="App container">
         <Navbar fluid collapseOnSelect>
           <Navbar.Header>
@@ -61,29 +45,32 @@ class App extends Component {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              {this.state.isAuthenticated
-                ? <Fragment>
-                    <LinkContainer to="/settings">
-                      <NavItem>Settings</NavItem>
-                    </LinkContainer>
-                    <NavItem onClick={this.handleLogout}>Logout</NavItem>
-                  </Fragment>
-                : <Fragment>
-                    <LinkContainer to="/signup">
-                      <NavItem>Signup</NavItem>
-                    </LinkContainer>
-                    <LinkContainer to="/login">
-                      <NavItem>Login</NavItem>
-                    </LinkContainer>
-                  </Fragment>
-              }
+              {isAuthenticated ? (
+                <Fragment>
+                  <LinkContainer to="/billings">
+                    <NavItem>Billings</NavItem>
+                  </LinkContainer>
+                  <LinkContainer to="/settings">
+                    <NavItem>Settings</NavItem>
+                  </LinkContainer>
+                  <NavItem onClick={handleLogout}>Logout</NavItem>
+                </Fragment>
+              ) : (
+                <Fragment>
+                  <LinkContainer to="/signup">
+                    <NavItem>Signup</NavItem>
+                  </LinkContainer>
+                  <LinkContainer to="/login">
+                    <NavItem>Login</NavItem>
+                  </LinkContainer>
+                </Fragment>
+              )}
             </Nav>
           </Navbar.Collapse>
         </Navbar>
-        <Routes childProps={childProps} />
+        <Routes appProps={{ isAuthenticated, userHasAuthenticated }} />
       </div>
-    );
-  }
+    )
+  );
 }
-
 export default withRouter(App);

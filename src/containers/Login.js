@@ -24,7 +24,7 @@ export default class Login extends Component {
     this.setState({
       [event.target.id]: event.target.value
     });
-  }
+  };
 
   handleSubmit = async event => {
     event.preventDefault();
@@ -38,7 +38,7 @@ export default class Login extends Component {
       alert(e.message);
       this.setState({ isLoading: false });
     }
-  }
+  };
 
   render() {
     return (
@@ -68,9 +68,9 @@ export default class Login extends Component {
             disabled={!this.validateForm()}
             type="submit"
             isLoading={this.state.isLoading}
-            text="Login"
-            loadingText="Logging in…"
-          />
+          >
+            Login
+          </LoaderButton>
         </form>
       </div>
     );

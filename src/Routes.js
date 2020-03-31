@@ -16,61 +16,60 @@ import AppliedRoute from "./components/AppliedRoute";
 import AuthenticatedRoute from "./components/AuthenticatedRoute";
 import UnauthenticatedRoute from "./components/UnauthenticatedRoute";
 
-export default ({ childProps }) => (
-  <Switch>
-    <AppliedRoute path="/" exact component={Home} props={childProps} />
-
-    <UnauthenticatedRoute
-      path="/login"
-      exact
-      component={Login}
-      props={childProps}
-    />
-    <UnauthenticatedRoute
-      path="/signup"
-      exact
-      component={Signup}
-      props={childProps}
-    />
-    <UnauthenticatedRoute
-      path="/login/reset"
-      exact
-      component={ResetPassword}
-      props={childProps}
-    />
-
-    <AuthenticatedRoute
-      path="/settings"
-      exact
-      component={Settings}
-      props={childProps}
-    />
-    <AuthenticatedRoute
-      path="/settings/email"
-      exact
-      component={ChangeEmail}
-      props={childProps}
-    />
-    <AuthenticatedRoute
-      path="/settings/password"
-      exact
-      component={ChangePassword}
-      props={childProps}
-    />
-    <AuthenticatedRoute
-      path="/notes/new"
-      exact
-      component={NewNote}
-      props={childProps}
-    />
-    <AuthenticatedRoute
-      path="/notes/:id"
-      exact
-      component={Notes}
-      props={childProps}
-    />
-
-    {/* Finally, catch all unmatched routes */}
-    <Route component={NotFound} />
-  </Switch>
-);
+export default function Routes({ appProps }) {
+  return (
+    <Switch>
+      <AppliedRoute path="/" exact component={Home} appProps={appProps} />
+      <UnauthenticatedRoute
+        path="/login"
+        exact
+        component={Login}
+        appProps={appProps}
+      />
+      <UnauthenticatedRoute
+        path="/signup"
+        exact
+        component={Signup}
+        appProps={appProps}
+      />
+      <UnauthenticatedRoute
+        path="/login/reset"
+        exact
+        component={ResetPassword}
+        appProps={appProps}
+      />
+      <AuthenticatedRoute
+        path="/settings"
+        exact
+        component={Settings}
+        appProps={appProps}
+      />
+      <AuthenticatedRoute
+        path="/settings/password"
+        exact
+        component={ChangePassword}
+        appProps={appProps}
+      />
+      <AuthenticatedRoute
+        path="/settings/email"
+        exact
+        component={ChangeEmail}
+        appProps={appProps}
+      />
+      <AuthenticatedRoute
+        path="/notes/new"
+        exact
+        component={NewNote}
+        appProps={appProps}
+      />
+      <AuthenticatedRoute
+        path="/notes/:id"
+        exact
+        component={Notes}
+        appProps={appProps}
+      />
+      {/* Finally, catch all unmatched routes */}
+      <Route component={NotFound} />
+    </Switch>
+  );
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, Fragment } from "react";
+import React, { useState, useEffect } from "react";
 import "./App.css";
 import Routes from "./Routes";
 import { Link, withRouter } from "react-router-dom";
@@ -46,24 +46,21 @@ function App(props) {
           <Navbar.Collapse>
             <Nav pullRight>
               {isAuthenticated ? (
-                <Fragment>
-                  <LinkContainer to="/billings">
-                    <NavItem>Billings</NavItem>
-                  </LinkContainer>
+                <>
                   <LinkContainer to="/settings">
                     <NavItem>Settings</NavItem>
                   </LinkContainer>
                   <NavItem onClick={handleLogout}>Logout</NavItem>
-                </Fragment>
+                </>
               ) : (
-                <Fragment>
+                <>
                   <LinkContainer to="/signup">
                     <NavItem>Signup</NavItem>
                   </LinkContainer>
                   <LinkContainer to="/login">
                     <NavItem>Login</NavItem>
                   </LinkContainer>
-                </Fragment>
+                </>
               )}
             </Nav>
           </Navbar.Collapse>

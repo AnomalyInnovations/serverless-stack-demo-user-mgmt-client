@@ -1,20 +1,37 @@
 {
-  "name": "notes-app",
+  "name": "notes-client",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "aws-amplify": "^1.1.5",
-    "react": "^16.5.1",
-    "react-bootstrap": "^0.32.1",
-    "react-dom": "^16.5.1",
-    "react-router-bootstrap": "^0.24.4",
-    "react-router-dom": "^4.2.2",
-    "react-scripts": "^1.1.5"
+    "@sentry/browser": "^5.15.4",
+    "aws-amplify": "^3.0.6",
+    "react": "^16.13.1",
+    "react-bootstrap": "^0.33.1",
+    "react-dom": "^16.13.1",
+    "react-router-bootstrap": "^0.25.0",
+    "react-router-dom": "^5.1.2",
+    "react-scripts": "3.4.1",
+    "react-stripe-elements": "^6.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

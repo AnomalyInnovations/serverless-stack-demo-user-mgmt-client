@@ -1,68 +1,62 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { API } from "aws-amplify";
 import { Link } from "react-router-dom";
+import { LinkContainer } from "react-router-bootstrap";
 import { PageHeader, ListGroup, ListGroupItem } from "react-bootstrap";
+import { useAppContext } from "../libs/contextLib";
+import { onError } from "../libs/errorLib";
 import "./Home.css";
 
-export default class Home extends Component {
-  constructor(props) {
-    super(props);
 
-    this.state = {
-      isLoading: true,
-      notes: []
-    };
-  }
+export default function Home() {
+  const [notes, setNotes] = useState([]);
+  const { isAuthenticated } = useAppContext();
+  const [isLoading, setIsLoading] = useState(true);
 
-  async componentDidMount() {
-    if (!this.props.isAuthenticated) {
-      return;
+  useEffect(() => {
+    async function onLoad() {
+      if (!isAuthenticated) {
+        return;
+      }
+
+      try {
+        const notes = await loadNotes();
+        setNotes(notes);
+      } catch (e) {
+        onError(e);
+      }
+
+      setIsLoading(false);
     }
 
-    try {
-      const notes = await this.notes();
-      this.setState({ notes });
-    } catch (e) {
-      alert(e);
-    }
+    onLoad();
+  }, [isAuthenticated]);
 
-    this.setState({ isLoading: false });
-  }
-
-  notes() {
+  function loadNotes() {
     return API.get("notes", "/notes");
   }
 
-  handleNoteClick = event => {
-    event.preventDefault();
-    this.props.history.push(event.currentTarget.getAttribute("href"));
-  }
-
-  renderNotesList(notes) {
-    return [{}].concat(notes).map(
-      (note, i) =>
-        i !== 0
-          ? <ListGroupItem
-              key={note.noteId}
-              href={`/notes/${note.noteId}`}
-              onClick={this.handleNoteClick}
-              header={note.content.trim().split("\n")[0]}
-            >
-              {"Created: " + new Date(note.createdAt).toLocaleString()}
-            </ListGroupItem>
-          : <ListGroupItem
-              key="new"
-              href="/notes/new"
-              onClick={this.handleNoteClick}
-            >
-              <h4>
-                <b>{"\uFF0B"}</b> Create a new note
-              </h4>
-            </ListGroupItem>
+  function renderNotesList(notes) {
+    return [{}].concat(notes).map((note, i) =>
+      i !== 0 ? (
+        <LinkContainer key={note.noteId} to={`/notes/${note.noteId}`}>
+          <ListGroupItem header={note.content.trim().split("\n")[0]}>
+            {"Created: " + new Date(note.createdAt).toLocaleString()}
+          </ListGroupItem>
+        </LinkContainer>
+      ) : (
+        <LinkContainer key="new" to="/notes/new">
+          <ListGroupItem>
+            <h4>
+              <b>{"\uFF0B"}</b> Create a new note
+            </h4>
+          </ListGroupItem>
+        </LinkContainer>
+      )
     );
   }
 
-  renderLander() {
+  function renderLander() {
     return (
       <div className="lander">
         <h1>Scratch</h1>
@@ -79,22 +73,20 @@ export default class Home extends Component {
     );
   }
 
-  renderNotes() {
+  function renderNotes() {
     return (
       <div className="notes">
         <PageHeader>Your Notes</PageHeader>
         <ListGroup>
-          {!this.state.isLoading && this.renderNotesList(this.state.notes)}
+          {!isLoading && renderNotesList(notes)}
         </ListGroup>
       </div>
     );
   }
 
-  render() {
-    return (
-      <div className="Home">
-        {this.props.isAuthenticated ? this.renderNotes() : this.renderLander()}
-      </div>
-    );
-  }
+  return (
+    <div className="Home">
+      {isAuthenticated ? renderNotes() : renderLander()}
+    </div>
+  );
 }
